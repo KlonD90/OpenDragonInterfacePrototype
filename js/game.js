@@ -2,6 +2,7 @@ import '../styl/game.styl';
 import React from 'react';
 var $ = require('jquery');
 
+
 if (React.initializeTouchEvents)
     React.initializeTouchEvents(true);
 
@@ -52,8 +53,38 @@ Array.prototype.scalar = function(){
     return Math.sqrt(s);
 };
 
-Array.prototype.angle = function(){
+Array.prototype.angle = function(a){
+    if (a)
+    {
+        this.vecdiff(a).angle();
+    }
+    else
+    {
+        return Math.atan2(this[1], this[0])*180/Math.PI;
+    }
+};
 
+Array.prototype.rads = function(a){
+    if (a)
+    {
+        this.vecdiff(a).rads();
+    }
+    else
+    {
+        return Math.atan2(this[1], this[0]);
+    }
+};
+
+Array.prototype.invert = function(n){
+    return this.map(function(x, i){
+        if (typeof(n)=='undefined')
+        {
+            return -x;
+        }
+        if (i==n)
+            return -x;
+        return x;
+    });
 };
 
 var MoveController = React.createClass({
@@ -82,6 +113,30 @@ var MoveController = React.createClass({
             return;
         }
         this.setState({touch: targetTouches[0].identifier, active: true});
+        var pos = [targetTouches[0].pageX, targetTouches[0].pageY];
+        //var center = this.getCenter();
+        var $ctrl = $(React.findDOMNode(this.refs.ctrl));
+        var $move = $(React.findDOMNode(this.refs.move));
+        var moveFix = [Math.round($move.width()/2), Math.round($move.height()/2)];
+        var center = [Math.round(($ctrl.width())/2), Math.round(($ctrl.height())/2)];
+        var offset = $ctrl.offset();
+        offset = [offset.left, offset.top];
+        var globCenter = offset.vecadd(center);
+        var diff = pos.vecdiff(globCenter).invert();
+        console.log(diff);
+        console.log(this.getDirection(diff));
+        var maxRad = Math.round($ctrl.width()/2-($move.width()/2));
+        if (diff.scalar() > maxRad)
+        {
+            var rads = diff.rads();
+            this.setState({
+                position: center.vecdiff([Math.cos(rads)*maxRad, Math.sin(rads)*maxRad]).vecdiff(moveFix)
+            });
+        }
+        else
+        {
+            this.setState({position: pos.vecdiff(offset).vecdiff(moveFix)});
+        }
     },
     _touchEnd: function(e){
         e.preventDefault();
@@ -92,6 +147,7 @@ var MoveController = React.createClass({
             if (targetTouches[i].identifier == this.state.touch)
             {
                 isFound = true;
+
             }
         }
         if (!isFound)
@@ -102,7 +158,7 @@ var MoveController = React.createClass({
     },
     _touchMove: function(e){
         e.preventDefault();
-        if (this.state.touch)
+        if (this.state.touch!=null)
         {
             var targetTouches = e.targetTouches;
             for (var i=0; i<targetTouches.length; i++)
@@ -110,16 +166,28 @@ var MoveController = React.createClass({
                 if (targetTouches[i].identifier == this.state.touch)
                 {
                     var pos = [targetTouches[i].pageX, targetTouches[i].pageY];
-                    var center = this.getCenter();
+                    //var center = this.getCenter();
                     var $ctrl = $(React.findDOMNode(this.refs.ctrl));
+                    var $move = $(React.findDOMNode(this.refs.move));
+                    var moveFix = [Math.round($move.width()/2), Math.round($move.height()/2)];
+                    var center = [Math.round(($ctrl.width())/2), Math.round(($ctrl.height())/2)];
                     var offset = $ctrl.offset();
+                    offset = [offset.left, offset.top];
                     var globCenter = offset.vecadd(center);
-                    var diff = globCenter.vecdiff(pos);
+                    var diff = pos.vecdiff(globCenter).invert();
                     console.log(diff);
-                    console.log(this.getDirection(diff));
-                    if (diff.scalar() > 50)
+                    console.log(this.getDirection(diff.invert(0)));
+                    var maxRad = Math.round($ctrl.width()/2-($move.width()/2));
+                    if (diff.scalar() > maxRad)
                     {
-
+                        var rads = diff.rads();
+                        this.setState({
+                            position: center.vecdiff([Math.cos(rads)*maxRad, Math.sin(rads)*maxRad]).vecdiff(moveFix)
+                        });
+                    }
+                    else
+                    {
+                        this.setState({position: pos.vecdiff(offset).vecdiff(moveFix)});
                     }
                 }
             }
