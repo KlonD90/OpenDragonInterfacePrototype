@@ -98,7 +98,8 @@ var MoveController = React.createClass({
     render: function(){
         var style = {
             left: this.state.position[0]+'px',
-            top: this.state.position[1]+'px'
+            top: this.state.position[1]+'px',
+			transition: this.state.active ? 'none' : 'all 0.2s'
         };
         return (<div className="MoveController" onTouchStart={this._touchStart} onTouchEnd={this._touchEnd}
                     onTouchMove={this._touchMove} ref='ctrl'>

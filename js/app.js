@@ -145,7 +145,8 @@
 	    render: function render() {
 	        var style = {
 	            left: this.state.position[0] + 'px',
-	            top: this.state.position[1] + 'px'
+	            top: this.state.position[1] + 'px',
+	            transition: this.state.active ? 'none' : 'all 0.2s'
 	        };
 	        return _react2['default'].createElement(
 	            'div',
@@ -348,7 +349,7 @@
 
 
 	// module
-	exports.push([module.id, ".MoveController {\n  border-radius: 100px;\n  width: 100px;\n  height: 100px;\n  border: 4px solid #ff0;\n  position: relative;\n  margin-left: 20px;\n  margin-bottom: 20px;\n}\n.MoveController__move {\n  position: absolute;\n  width: 30px;\n  height: 30px;\n  border-radius: 50px;\n  background: #c71585;\n  transition: all 0.2s;\n}\n.Screen__ctrl {\n  position: fixed;\n  bottom: 0;\n  left: 0;\n}\n", ""]);
+	exports.push([module.id, ".MoveController {\n  border-radius: 100px;\n  width: 100px;\n  height: 100px;\n  border: 4px solid #ff0;\n  position: relative;\n  box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.2);\n  background: rgba(200,200,200,0.3);\n}\n.MoveController__move {\n  position: absolute;\n  width: 40px;\n  height: 40px;\n  border-radius: 50px;\n  background: #c71585;\n  box-shadow: 2px 2px 4px 1px #ccc;\n}\n.Screen__ctrl {\n  position: fixed;\n  bottom: 10%;\n  left: 5%;\n}\n", ""]);
 
 	// exports
 
