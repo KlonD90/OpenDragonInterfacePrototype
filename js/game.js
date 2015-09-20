@@ -245,6 +245,26 @@ var MoveController = React.createClass({
     }
 });
 
+var Field = React.createClass({
+    getInitialState: function(){
+        gameStore.subscribe(function() {
+            this.setState({field: gameStore.field});
+        });
+        return {
+            field: gameStore.field
+        }
+    },
+    render: function(){
+        this.state.field
+    }
+});
+
+var Tile = React.createClass({
+    render: function(){
+
+    }
+});
+
 function createField(w, h){
     var a = [];
     //for (var i=0; i<h; i++)
