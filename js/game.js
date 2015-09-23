@@ -23,6 +23,9 @@ var Screen = React.createClass({
                 <div className="Screen__ctrl">
                     <MoveController/>
                 </div>
+                <div className="Screen__field">
+                    <Field/>
+                </div>
             </div>
         );
     }
@@ -255,32 +258,49 @@ var Field = React.createClass({
         }
     },
     render: function(){
-        this.state.field
+        var rows = this.state.field.map(function(r, num){
+            var tiles = r.map(function(t, i){
+                return (<Tile data={t} key={i}/>);
+            });
+            return (<div className="field__row" key={num}>{tiles}</div>);
+        })
+
+        return (<div className="field">{rows}</div>);
     }
 });
 
 var Tile = React.createClass({
-    render: function(){
-
+    render: function() {
+        var style = {background: this.props.data};
+        return <div className="tile" style={style}></div>
     }
 });
 
+function generateRandomColor(){
+    var color = '#';
+    for (var i=0; i<6; i++)
+    {
+        color+=Math.floor(Math.random()*16).toString(16);
+    }
+    return color;
+}
+
 function createField(w, h){
     var a = [];
-    //for (var i=0; i<h; i++)
-    //{
-    //    var row = [];
-    //    for (var j=0;j<w;w++)
-    //    {
-    //        row.push(null);
-    //    }
-    //    a.push(row);
-    //}
+    for (var i=0; i<h; i++)
+    {
+        var row = [];
+        for (var j=0;j<w; j++)
+        {
+            row.push(generateRandomColor());
+        }
+        a.push(row);
+    }
     return a;
 }
 
 var gameStore = {
-    field: createField(16, 9),
+    field: createField(10, 6),
     gameWorld: function(){
 
     },

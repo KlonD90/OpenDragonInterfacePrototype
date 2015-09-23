@@ -79,6 +79,11 @@
 	                'div',
 	                { className: 'Screen__ctrl' },
 	                _react2['default'].createElement(MoveController, null)
+	            ),
+	            _react2['default'].createElement(
+	                'div',
+	                { className: 'Screen__field' },
+	                _react2['default'].createElement(Field, null)
 	            )
 	        );
 	    }
@@ -265,22 +270,68 @@
 	    }
 	});
 
+	var Field = _react2['default'].createClass({
+	    displayName: 'Field',
+
+	    getInitialState: function getInitialState() {
+	        gameStore.subscribe(function () {
+	            this.setState({ field: gameStore.field });
+	        });
+	        return {
+	            field: gameStore.field
+	        };
+	    },
+	    render: function render() {
+	        var rows = this.state.field.map(function (r, num) {
+	            var tiles = r.map(function (t, i) {
+	                return _react2['default'].createElement(Tile, { data: t, key: i });
+	            });
+	            return _react2['default'].createElement(
+	                'div',
+	                { className: 'field__row', key: num },
+	                tiles
+	            );
+	        });
+
+	        return _react2['default'].createElement(
+	            'div',
+	            { className: 'field' },
+	            rows
+	        );
+	    }
+	});
+
+	var Tile = _react2['default'].createClass({
+	    displayName: 'Tile',
+
+	    render: function render() {
+	        var style = { background: this.props.data };
+	        return _react2['default'].createElement('div', { className: 'tile', style: style });
+	    }
+	});
+
+	function generateRandomColor() {
+	    var color = '#';
+	    for (var i = 0; i < 6; i++) {
+	        color += Math.floor(Math.random() * 16).toString(16);
+	    }
+	    return color;
+	}
+
 	function createField(w, h) {
 	    var a = [];
-	    //for (var i=0; i<h; i++)
-	    //{
-	    //    var row = [];
-	    //    for (var j=0;j<w;w++)
-	    //    {
-	    //        row.push(null);
-	    //    }
-	    //    a.push(row);
-	    //}
+	    for (var i = 0; i < h; i++) {
+	        var row = [];
+	        for (var j = 0; j < w; j++) {
+	            row.push(generateRandomColor());
+	        }
+	        a.push(row);
+	    }
 	    return a;
 	}
 
 	var gameStore = {
-	    field: createField(16, 9),
+	    field: createField(10, 6),
 	    gameWorld: function gameWorld() {},
 	    renderField: function renderField() {},
 	    actions: {
@@ -349,7 +400,7 @@
 
 
 	// module
-	exports.push([module.id, ".MoveController {\n  border-radius: 100px;\n  width: 100px;\n  height: 100px;\n  border: 4px solid #ff0;\n  position: relative;\n  box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.2);\n  background: rgba(200,200,200,0.3);\n}\n.MoveController__move {\n  position: absolute;\n  width: 40px;\n  height: 40px;\n  border-radius: 50px;\n  background: #c71585;\n  box-shadow: 2px 2px 4px 1px #ccc;\n}\n.Screen__ctrl {\n  position: fixed;\n  bottom: 10%;\n  left: 5%;\n}\n", ""]);
+	exports.push([module.id, ".MoveController {\n  border-radius: 100px;\n  width: 100px;\n  height: 100px;\n  border: 4px solid #ff0;\n  position: relative;\n  box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.2);\n  background: rgba(200,200,200,0.3);\n}\n.MoveController__move {\n  position: absolute;\n  width: 40px;\n  height: 40px;\n  border-radius: 50px;\n  background: #c71585;\n  box-shadow: 1px 1px 4px 0px #ccc;\n}\n.Screen__ctrl {\n  position: fixed;\n  bottom: 10%;\n  left: 5%;\n}\n.tile {\n  width: 10vw;\n  height: 16.666666666666668vh;\n  display: inline-block;\n  background: #f00;\n  float: left;\n}\n.tile:hover {\n  box-shadow: inset 0px 0px 0px 1px rgba(0,0,0,0.5);\n}\n.field__row {\n  overflow: hidden;\n  white-space: nowrap;\n}\nbody {\n  padding: 0;\n  margin: 0;\n}\n", ""]);
 
 	// exports
 

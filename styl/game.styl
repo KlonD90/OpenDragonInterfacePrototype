@@ -1,3 +1,8 @@
+widthCount = 10
+heightCount = 6
+tileWidth = 100vw/widthCount
+tileHeight = 100vh/heightCount
+
 .MoveController
   border-radius 100px
   width 100px
@@ -12,9 +17,23 @@
     height: 40px
     border-radius 50px
     background mediumvioletred
-    box-shadow: 2px 2px 4px 1px #ccc;
+    box-shadow: 1px 1px 4px 0px #ccc;
 .Screen
   &__ctrl
     position fixed
     bottom 10%
     left 5%
+.tile
+  width tileWidth
+  height tileHeight
+  display inline-block
+  background red
+  float left
+.tile:hover
+  box-shadow inset 0px 0px 0px 1px rgba(0,0,0,0.5)
+.field__row
+  overflow:hidden
+  white-space nowrap
+body
+  padding 0
+  margin 0
